@@ -3,6 +3,7 @@ package com.mycompany.mensajes_app;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /* Las clases DAO son las encargadas de hacer la conexion con la BD
@@ -32,7 +33,7 @@ public class MensajesDAO {
                 System.out.println("Mensaje creado");
                 
             } catch(SQLException ex){ //En caso de no crear el mensaje
-                System.out.println("ex");
+                System.out.println(ex);
             }
         } catch(SQLException e){ //Por si alguna razon no nos conectamos a la BD
             System.out.println(e);
@@ -42,7 +43,28 @@ public class MensajesDAO {
     
     
     public static void leerMensajeDB(){
+        Conexion db_connect = new Conexion();
+        PreparedStatement ps = null; //Prepara la sentencia
+        ResultSet rs = null; //Trae los datos de la BD, en filas para procesarlos
         
+         try( Connection conexion = db_connect.get_connection() ){
+             String query = "SELECT * FROM mensajes";
+             ps = conexion.prepareStatement(query);
+             rs = ps.executeQuery(); //executeQuert Solo pide datos, no crea, actualiza o elimina
+             
+             //Mientras ResultSet tenga datos, imprimirlos
+             while( rs.next() ){                 
+                 System.out.println("ID: " +rs.getInt("id_mensaje")); //id_mensaje nombre del campo en la BD
+                 System.out.println("Mensaje: " +rs.getString("mensaje")); //mensaje es el nombre del campo en la BD
+                 System.out.println("Autor: " +rs.getString("autor_mensaje"));
+                 System.out.println("Fecha: " +rs.getString("fecha_mensaje"));
+                 System.out.println(""); //Salto de linea
+             }
+             
+         } catch(SQLException e){
+                System.out.println("No se pudieron recuperar los mensajes");
+                System.out.println(e);
+         }
     }
     
     
