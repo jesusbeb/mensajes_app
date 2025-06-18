@@ -40,6 +40,17 @@ public class mensajesService {
     
     
     public static void editarMensaje(){
+        Scanner sc = new Scanner(System.in);
         
+        System.out.println("Indica el id del mensaje a editar: ");
+        int id_mensaje = sc.nextInt();
+        sc.nextLine(); //Aqui se consume el '\n' del sc.nextInt() para no saltar el siguiente nextLine
+        System.out.println("Escribe el nuevo mensaje: ");
+        String mensaje = sc.nextLine();    
+
+        Mensajes actualizarm = new Mensajes();
+        actualizarm.setId_mensaje(id_mensaje);
+        actualizarm.setMensaje(mensaje);
+        MensajesDAO.actualizarMensajeDB(actualizarm);
     }
 }
